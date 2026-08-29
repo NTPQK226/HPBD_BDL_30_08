@@ -262,44 +262,140 @@ document.addEventListener('DOMContentLoaded', () => {
   animateConfetti();
 
   /* ==========================================================================
-     3. AUDIO CONTROLLER & SYNTHESIZER FALLBACK
+     3. AUDIO CONTROLLER & UNTIL YOU (PIANO) SYNTHESIZER
      ========================================================================== */
-  function playSynthMelody() {
+  function createPianoNote(freq, time, duration = 0.8, volume = 0.15) {
+    if (!audioContext || audioContext.state === 'suspended') return;
+
+    // Multi-harmonic acoustic piano timbre simulation
+    const harmonics = [
+      { type: 'sine', gain: 1.0, mult: 1 },
+      { type: 'triangle', gain: 0.4, mult: 2 },
+      { type: 'sine', gain: 0.15, mult: 3 }
+    ];
+
+    harmonics.forEach(h => {
+      const osc = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      osc.type = h.type;
+      osc.frequency.setValueAtTime(freq * h.mult, time);
+
+      // Piano ADSR envelope: punchy attack, natural decay
+      gainNode.gain.setValueAtTime(0.0001, time);
+      gainNode.gain.linearRampToValueAtTime(volume * h.gain, time + 0.015);
+      gainNode.gain.exponentialRampToValueAtTime(volume * h.gain * 0.4, time + 0.2);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      osc.start(time);
+      osc.stop(time + duration + 0.05);
+    });
+  }
+
+  function playUntilYouPiano() {
     if (synthInterval) return;
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (!audioContext) audioContext = new AudioContextClass();
       if (audioContext.state === 'suspended') audioContext.resume();
 
-      // Gentle romantic chord arpeggio notes in Hz (C Major 7th & A minor 9th)
-      const notes = [
-        261.63, 329.63, 392.00, 493.88, 523.25, // C4, E4, G4, B4, C5
-        220.00, 261.63, 329.63, 440.00, 493.88, // A3, C4, E4, A4, B4
-        349.23, 440.00, 523.25, 659.25,         // F4, A4, C5, E5
-        392.00, 493.88, 587.33, 783.99          // G4, B4, D5, G5
+      // Note frequency map (in Hz)
+      const N = {
+        C3: 130.81, E3: 164.81, G3: 196.00, A3: 220.00, B3: 246.94,
+        C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+        C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00
+      };
+
+      // "Until You" (Shayne Ward) Piano Arrangement: Melody + Arpeggiated Chords
+      // Verse: "Baby life was good to me..." -> Chorus: "It's gotta be you... Until you..."
+      const score = [
+        // Measure 1: C Major - "Baby life was good to me..."
+        { m: N.G4, bass: [N.C3, N.G3, N.E4], dur: 0.6 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.A4, bass: [N.G3], dur: 0.3 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.E4, bass: [N.C4], dur: 0.6 },
+
+        // Measure 2: G Major - "But you just made it better..."
+        { m: N.G4, bass: [N.G3, N.D4, N.B4], dur: 0.6 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.A4, bass: [N.D4], dur: 0.3 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.E4, bass: [N.B3], dur: 0.6 },
+
+        // Measure 3: Am - "I love the way you stand by me..."
+        { m: N.G4, bass: [N.A3, N.E4, N.C5], dur: 0.6 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.A4, bass: [N.E4], dur: 0.3 },
+        { m: N.G4, bass: [], dur: 0.3 },
+        { m: N.E4, bass: [N.A3], dur: 0.6 },
+
+        // Measure 4: F Major - "Through any kind of weather..."
+        { m: N.F4, bass: [N.F3, N.C4, N.A4], dur: 0.4 },
+        { m: N.E4, bass: [], dur: 0.4 },
+        { m: N.D4, bass: [N.C4], dur: 0.4 },
+        { m: N.C4, bass: [N.F3], dur: 0.8 },
+
+        // Measure 5: Chorus - "It's gotta be you..."
+        { m: N.E5, bass: [N.C3, N.G3, N.E4], dur: 0.5 },
+        { m: N.D5, bass: [], dur: 0.3 },
+        { m: N.C5, bass: [N.G3], dur: 0.4 },
+        { m: N.D5, bass: [], dur: 0.4 },
+        { m: N.E5, bass: [N.E4], dur: 0.8 },
+
+        // Measure 6: "No one else will do..."
+        { m: N.G5, bass: [N.G3, N.D4, N.B4], dur: 0.5 },
+        { m: N.E5, bass: [], dur: 0.3 },
+        { m: N.D5, bass: [N.D4], dur: 0.4 },
+        { m: N.C5, bass: [], dur: 0.4 },
+        { m: N.D5, bass: [N.G3], dur: 0.8 },
+
+        // Measure 7: "'Cause I'll never love someone like I loved you..."
+        { m: N.C5, bass: [N.A3, N.E4, N.C5], dur: 0.3 },
+        { m: N.D5, bass: [], dur: 0.3 },
+        { m: N.E5, bass: [N.E4], dur: 0.4 },
+        { m: N.G5, bass: [], dur: 0.4 },
+        { m: N.E5, bass: [N.A3], dur: 0.4 },
+        { m: N.D5, bass: [], dur: 0.3 },
+        { m: N.C5, bass: [N.C4], dur: 0.6 },
+
+        // Measure 8: "Until you... Until you..."
+        { m: N.E5, bass: [N.F3, N.C4, N.A4], dur: 0.8 },
+        { m: N.D5, bass: [N.C4], dur: 0.8 },
+        { m: N.C5, bass: [N.F3, N.G3, N.C4], dur: 1.6 }
       ];
-      let noteIndex = 0;
 
-      synthInterval = setInterval(() => {
+      let noteStep = 0;
+      function scheduleNextNote() {
         if (!isMusicPlaying) return;
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(notes[noteIndex % notes.length], audioContext.currentTime);
+        const current = score[noteStep % score.length];
+        const now = audioContext.currentTime;
 
-        gain.gain.setValueAtTime(0.001, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1.2);
+        // Play melody note
+        if (current.m) {
+          createPianoNote(current.m, now, current.dur * 1.2, 0.16);
+        }
 
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
+        // Play harmonic piano bass chords
+        if (current.bass && current.bass.length > 0) {
+          current.bass.forEach((bFreq, idx) => {
+            createPianoNote(bFreq, now + idx * 0.04, current.dur * 1.5, 0.08);
+          });
+        }
 
-        osc.start();
-        osc.stop(audioContext.currentTime + 1.3);
+        noteStep++;
+        const nextDelay = current.dur * 700; // Tempo timing
+        synthInterval = setTimeout(scheduleNextNote, nextDelay);
+      }
 
-        noteIndex++;
-      }, 600);
+      scheduleNextNote();
     } catch (e) {
       console.log('Audio Context fallback initialized.');
     }
@@ -307,9 +403,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function stopSynthMelody() {
     if (synthInterval) {
-      clearInterval(synthInterval);
+      clearTimeout(synthInterval);
       synthInterval = null;
     }
+  }
+
+  function startMusic() {
+    if (isMusicPlaying) return;
+    isMusicPlaying = true;
+    musicPill.classList.add('playing');
+
+    if (audioContext && audioContext.state === 'suspended') {
+      audioContext.resume();
+    }
+
+    bgAudio.play().catch(() => {
+      // If no mp3 or blocked, use our Until You Piano synthesizer
+      playUntilYouPiano();
+    });
   }
 
   function toggleMusic() {
@@ -319,16 +430,26 @@ document.addEventListener('DOMContentLoaded', () => {
       musicPill.classList.remove('playing');
       isMusicPlaying = false;
     } else {
-      isMusicPlaying = true;
-      musicPill.classList.add('playing');
-      bgAudio.play().catch(() => {
-        // Fallback to Web Audio synth if no custom mp3 file is present
-        playSynthMelody();
-      });
+      startMusic();
     }
   }
 
   musicPill.addEventListener('click', toggleMusic);
+
+  // Auto-play on load & fallback trigger on ANY first click/touch
+  window.addEventListener('load', () => {
+    startMusic();
+  });
+
+  function unlockAudioOnFirstInteraction() {
+    startMusic();
+    document.removeEventListener('pointerdown', unlockAudioOnFirstInteraction);
+    document.removeEventListener('click', unlockAudioOnFirstInteraction);
+    document.removeEventListener('touchstart', unlockAudioOnFirstInteraction);
+  }
+  document.addEventListener('pointerdown', unlockAudioOnFirstInteraction, { once: true });
+  document.addEventListener('click', unlockAudioOnFirstInteraction, { once: true });
+  document.addEventListener('touchstart', unlockAudioOnFirstInteraction, { once: true });
 
   /* ==========================================================================
      4. SCENE NAVIGATION & INTERACTION

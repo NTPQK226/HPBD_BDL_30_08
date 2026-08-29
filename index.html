@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Happy Birthday Bùi Diệu Linh | 30.08</title>
-  <meta name="description" content="Chúc mừng sinh nhật Bùi Diệu Linh - 30/08/2005. Món quà sinh nhật đặc biệt và tràn ngập yêu thương.">
-  
+  <meta name="description"
+    content="Chúc mừng sinh nhật Bùi Diệu Linh - 30/08/2005. Món quà sinh nhật đặc biệt và tràn ngập yêu thương.">
+
   <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
 
   <!-- Google Fonts: Be Vietnam Pro, Playfair Display, Dancing Script (Vietnamese Supported) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <!-- Dynamic Background Particle Canvas -->
   <canvas id="bg-canvas"></canvas>
@@ -34,15 +40,16 @@
       <span class="bar bar-3"></span>
       <span class="bar bar-4"></span>
     </div>
-    <span class="music-title" id="music-title">Happy Birthday Linh 🎵</span>
+    <span class="music-title" id="music-title">Until You (Piano) 🎵</span>
     <audio id="bg-audio" loop preload="auto">
+      <source src="assets/until_you.mp3" type="audio/mpeg">
       <source src="assets/music.mp3" type="audio/mpeg">
     </audio>
   </div>
 
   <!-- Main Container Wrapper -->
   <main class="app-container">
-    
+
     <!-- ==================== SCENE 1: ENVELOPE OPENING ==================== -->
     <section class="scene scene-envelope active" id="scene-envelope">
       <div class="envelope-wrapper">
@@ -111,98 +118,69 @@
     <!-- ==================== SCENE 3: LETTER & MEMORY GALLERY ==================== -->
     <section class="scene scene-letter" id="scene-letter">
       <div class="letter-layout">
-        
+
         <!-- Romantic Letter Card -->
         <article class="letter-card glass-panel">
           <div class="letter-header">
             <span class="letter-date">Hà Nội, Ngày 30 tháng 08</span>
-            <span class="letter-badge">Gửi Diệu Linh của anh ❤️</span>
+            <span class="letter-badge">To: BDL ❤️</span>
           </div>
-          
-          <h2 class="letter-greeting">Gửi Linh, cô gái tháng 8 tuyệt vời nhất...</h2>
+
+          <h2 class="letter-greeting">Happy Birthday</h2>
 
           <div class="letter-body">
             <p>
-              Chúc mừng sinh nhật lần thứ 21 của em — cô gái sinh ngày <strong>30/08/2005</strong> mang nụ cười đẹp nhất mà anh từng gặp.
+              Chúc mừng sinh nhật lần thứ 21 của bri
             </p>
             <p>
-              Bước sang tuổi mới, anh chúc Linh luôn luôn xinh đẹp, tự tin, học tập và làm việc thật suôn sẻ, luôn giữ được nét dễ thương, hồn nhiên và năng lượng tích cực của riêng mình. Mong rằng mọi dự định và ước mơ của em đều sẽ trở thành hiện thực rực rỡ nhất.
-            </p>
-            <p>
-              Cảm ơn em vì đã xuất hiện và mang đến cho thế giới này (và cả cuộc sống của anh) thật nhiều điều ngọt ngào và dịu dàng. Dù ngày hôm nay hay những năm tháng về sau, mong em sẽ luôn được yêu thương và nâng niu trọn vẹn nhất.
+              Bước sang tuổi mới, anh chúc bri luôn luôn xinh đẹp, tự tin, học tập và làm việc thật suôn sẻ, luôn giữ
+              được nét dễ thương, hồn nhiên và năng lượng tích cực của riêng mình.
             </p>
             <p class="letter-quote">
-              "Thế giới có hơn 8 tỷ người, nhưng với anh, nụ cười của Linh luôn là điều lấp lánh nhất."
+              "Best Wishes"
             </p>
           </div>
 
           <div class="letter-footer">
-            <p class="signature-note">Yêu thương và chúc mừng sinh nhật em,</p>
-            <p class="signature-name">Forever with you 💖</p>
+            <p class="signature-name">NTP 💖</p>
           </div>
         </article>
 
-        <!-- Sweet Reasons Accordion / Cards -->
-        <div class="reasons-wrapper">
-          <h3 class="sub-heading">Những điều nhỏ bé làm anh yêu Linh ✨</h3>
-          <div class="reasons-grid">
-            <div class="reason-card glass-panel" data-tilt>
-              <div class="reason-icon">🌸</div>
-              <h4>Nụ cười toả nắng</h4>
-              <p>Mỗi khi Linh cười, mọi mệt mỏi trong ngày dường như đều tan biến hết.</p>
-            </div>
-            <div class="reason-card glass-panel" data-tilt>
-              <div class="reason-icon">✨</div>
-              <h4>Sự dịu dàng & đáng yêu</h4>
-              <p>Cách em quan tâm, lắng nghe và chia sẻ mọi câu chuyện nhỏ nhặt thường ngày.</p>
-            </div>
-            <div class="reason-card glass-panel" data-tilt>
-              <div class="reason-icon">💫</div>
-              <h4>Sự mạnh mẽ & nỗ lực</h4>
-              <p>Em luôn kiên trì và cố gắng hết mình cho những mục tiêu mà em theo đuổi.</p>
-            </div>
-            <div class="reason-card glass-panel" data-tilt>
-              <div class="reason-icon">🎀</div>
-              <h4>Là chính em</h4>
-              <p>Bùi Diệu Linh độc nhất vô nhị, cô gái hoàn hảo và đáng trân trọng nhất!</p>
-            </div>
-          </div>
-        </div>
-
         <!-- 3D Polaroid Memory Gallery -->
         <div class="gallery-section">
-          <h3 class="sub-heading">Góc Kỷ Niệm Của Chúng Mình 📸</h3>
-          <p class="gallery-desc">Mỗi khoảnh khắc có em đều là một thước phim đẹp đẽ</p>
+          <h3 class="sub-heading">Góc Kỷ Niệm 📸</h3>
 
           <div class="polaroid-grid">
             <!-- Polaroid 1 -->
             <div class="polaroid-card" style="--rotation: -3deg;">
               <div class="polaroid-pin">📍</div>
               <div class="polaroid-img-wrapper">
-                <img src="assets/photo1.jpg" alt="Ảnh kỷ niệm 1" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
+                <img src="assets/2e7f8fb1-549a-4788-921b-024927475c4c.jpg" alt="Ảnh kỷ niệm 1"
+                  onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
               </div>
-              <p class="polaroid-caption">Nụ cười đầu tiên làm anh xao xuyến ✨</p>
+              <p class="polaroid-caption">hahaha</p>
             </div>
 
             <!-- Polaroid 2 -->
             <div class="polaroid-card" style="--rotation: 2.5deg;">
               <div class="polaroid-pin">📍</div>
               <div class="polaroid-img-wrapper">
-                <img src="assets/photo2.jpg" alt="Ảnh kỷ niệm 2" onerror="this.src='https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80'">
+                <img src="assets/505447fe-7eb6-42fd-b813-1fb5f8b06f93.jpg" alt="Ảnh kỷ niệm 2"
+                  onerror="this.src='https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80'">
               </div>
-              <p class="polaroid-caption">Những buổi hẹn hò ngập tràn tiếng cười ☕</p>
+              <p class="polaroid-caption">hahaha</p>
             </div>
 
             <!-- Polaroid 3 -->
             <div class="polaroid-card" style="--rotation: -2deg;">
               <div class="polaroid-pin">📍</div>
               <div class="polaroid-img-wrapper">
-                <img src="assets/photo3.jpg" alt="Ảnh kỷ niệm 3" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80'">
+                <img src="assets/d580c553-a228-452c-9b75-77dc3acdeac6.jpg" alt="Ảnh kỷ niệm 3"
+                  onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80'">
               </div>
-              <p class="polaroid-caption">Sinh nhật 21 tuổi rực rỡ nhất 🎂</p>
+              <p class="polaroid-caption">hahaha</p>
             </div>
           </div>
-          <p class="photo-note">*(Bạn có thể dễ dàng thay 3 ảnh này bằng ảnh thật của Linh trong thư mục `assets/` nhé)*</p>
         </div>
 
         <!-- Interactive Shooting Star Wish Maker -->
@@ -223,7 +201,7 @@
         <footer class="app-footer">
           <div class="footer-heart">💖</div>
           <p class="footer-title">HAPPY BIRTHDAY BÙI DIỆU LINH (30/08/2005)</p>
-          <p class="footer-sub">Chúc em một ngày sinh nhật thật ấm áp và hạnh phúc!</p>
+          <p class="footer-sub">Tuổi mới thật ấm áp và hạnh phúc!</p>
           <button class="btn-secondary" id="btn-replay">
             <span>🔄 Xem lại từ đầu</span>
           </button>
@@ -236,4 +214,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
