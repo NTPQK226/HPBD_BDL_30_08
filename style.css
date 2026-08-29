@@ -498,12 +498,12 @@ html, body {
   50% { opacity: 0.35; }
 }
 
-/* 3D CSS Birthday Cake */
+/* 3D Realistic CSS Birthday Cake (Classic CodePen Design) */
 .cake-box {
   position: relative;
-  width: 260px;
-  height: 250px;
-  margin: 30px auto 10px;
+  width: 320px;
+  height: 280px;
+  margin: 30px auto 15px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -511,68 +511,134 @@ html, body {
 
 .cake {
   position: relative;
-  width: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 260px;
+  height: 230px;
 }
 
+/* Ceramic Cake Plate */
 .plate {
   position: absolute;
   bottom: -15px;
-  width: 260px;
-  height: 20px;
-  background: radial-gradient(ellipse at center, #ffffff 0%, #e0d0db 70%, #b8a6b3 100%);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 290px;
+  height: 28px;
+  background: radial-gradient(ellipse at 50% 30%, #ffffff 0%, #e2d8e2 65%, #bfa8be 100%);
   border-radius: 50%;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.8);
   z-index: 1;
 }
 
+/* Cake Layers (Proper bottom-up stacking) */
 .layer {
-  position: relative;
-  border-radius: 12px 12px 6px 6px;
-  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.4), 0 8px 15px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 14px 14px 6px 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 -4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .layer-bottom {
-  width: 200px;
-  height: 60px;
-  background: linear-gradient(to right, #6b2d4f, #94406f, #6b2d4f);
+  bottom: 0px;
+  width: 240px;
+  height: 70px;
+  background: linear-gradient(135deg, #78294f 0%, #a83d71 50%, #631e3f 100%);
   z-index: 2;
 }
 
 .layer-middle {
-  width: 150px;
-  height: 50px;
-  background: linear-gradient(to right, #ff758c, #ff9aab, #ff758c);
+  bottom: 60px;
+  width: 180px;
+  height: 60px;
+  background: linear-gradient(135deg, #f77f9e 0%, #ffa3b9 50%, #e86386 100%);
   z-index: 3;
 }
 
 .layer-top {
-  width: 100px;
-  height: 45px;
-  background: linear-gradient(to right, #fff0f5, #ffffff, #fff0f5);
+  bottom: 114px;
+  width: 125px;
+  height: 52px;
+  background: linear-gradient(135deg, #fff2f6 0%, #ffffff 50%, #ffe0ea 100%);
   z-index: 4;
 }
 
-/* Cream drips */
-.cream-drips {
+/* Dripping Icing / Frosting */
+.icing {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 14px;
+  height: 16px;
   background: #ffffff;
-  border-radius: 12px 12px 8px 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+  z-index: 5;
+}
+
+.drip {
+  position: absolute;
+  top: 14px;
+  background: #ffffff;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+}
+
+/* Layer Bottom Drips */
+.layer-bottom .drip-1 { left: 12px; width: 16px; height: 16px; }
+.layer-bottom .drip-2 { left: 38px; width: 14px; height: 26px; }
+.layer-bottom .drip-3 { left: 66px; width: 18px; height: 14px; }
+.layer-bottom .drip-4 { left: 98px; width: 15px; height: 28px; }
+.layer-bottom .drip-5 { left: 128px; width: 17px; height: 18px; }
+.layer-bottom .drip-6 { left: 158px; width: 14px; height: 24px; }
+.layer-bottom .drip-7 { left: 185px; width: 18px; height: 15px; }
+.layer-bottom .drip-8 { left: 212px; width: 15px; height: 20px; }
+
+/* Layer Middle Drips */
+.layer-middle .drip-1 { left: 10px; width: 15px; height: 18px; }
+.layer-middle .drip-2 { left: 36px; width: 18px; height: 28px; }
+.layer-middle .drip-3 { left: 68px; width: 14px; height: 16px; }
+.layer-middle .drip-4 { left: 96px; width: 17px; height: 24px; }
+.layer-middle .drip-5 { left: 126px; width: 15px; height: 18px; }
+.layer-middle .drip-6 { left: 152px; width: 16px; height: 22px; }
+
+/* Layer Top Drips */
+.layer-top .drip-1 { left: 8px; width: 14px; height: 18px; }
+.layer-top .drip-2 { left: 32px; width: 16px; height: 25px; }
+.layer-top .drip-3 { left: 62px; width: 15px; height: 16px; }
+.layer-top .drip-4 { left: 92px; width: 16px; height: 22px; }
+
+/* Strawberry / Cherry Toppings */
+.berry-toppings {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 6;
+}
+
+.berry {
+  font-size: 1.35rem;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.berry:hover {
+  transform: scale(1.2) rotate(8deg);
 }
 
 /* Candle */
 .candle {
   position: absolute;
-  top: -42px;
+  bottom: 164px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 14px;
-  height: 45px;
+  height: 48px;
   background: repeating-linear-gradient(
     45deg,
     #ffd166,
@@ -582,24 +648,37 @@ html, body {
   );
   border-radius: 6px;
   cursor: pointer;
-  z-index: 5;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .candle:hover {
-  transform: scale(1.1);
+  transform: translateX(-50%) scale(1.12);
+}
+
+/* Candle Wick */
+.candle::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 7px;
+  background: #333;
+  border-radius: 2px;
 }
 
 /* Candle Flame */
 .flame {
   position: absolute;
-  top: -24px;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 16px;
-  height: 26px;
-  background: radial-gradient(ellipse at 50% 80%, #ffffff 0%, #ffd166 40%, #ff4d6d 90%);
+  width: 18px;
+  height: 30px;
+  background: radial-gradient(ellipse at 50% 80%, #ffffff 0%, #ffd166 40%, #ff4d6d 85%);
   border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
   box-shadow: 0 0 25px 8px rgba(255, 209, 102, 0.8), 0 0 50px 15px rgba(255, 77, 109, 0.5);
   animation: flameFlicker 1.2s infinite ease-in-out alternate;
@@ -608,9 +687,9 @@ html, body {
 }
 
 @keyframes flameFlicker {
-  0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+  0% { transform: translateX(-50%) scale(1) rotate(-3deg); }
   50% { transform: translateX(-50%) scale(1.08) rotate(3deg); }
-  100% { transform: translateX(-50%) scale(0.95) rotate(-1deg); }
+  100% { transform: translateX(-50%) scale(0.96) rotate(-1deg); }
 }
 
 .candle.blown .flame {
@@ -622,7 +701,7 @@ html, body {
 /* Smoke effect */
 .smoke {
   position: absolute;
-  top: -20px;
+  top: -24px;
   left: 50%;
   transform: translateX(-50%);
   width: 6px;
