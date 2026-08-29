@@ -409,7 +409,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function startMusic() {
-    if (isMusicPlaying) return;
     isMusicPlaying = true;
     musicPill.classList.add('playing');
 
@@ -417,13 +416,21 @@ document.addEventListener('DOMContentLoaded', () => {
       audioContext.resume();
     }
 
-    bgAudio.play().catch(() => {
-      // If no mp3 or blocked, use our Until You Piano synthesizer
-      playUntilYouPiano();
-    });
+    const playPromise = bgAudio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          musicPill.classList.add('playing');
+        })
+        .catch((err) => {
+          console.log('Audio autoplay blocked or failed, waiting for user gesture or using synth:', err);
+          playUntilYouPiano();
+        });
+    }
   }
 
-  function toggleMusic() {
+  function toggleMusic(e) {
+    if (e) e.stopPropagation();
     if (isMusicPlaying) {
       bgAudio.pause();
       stopSynthMelody();
@@ -436,20 +443,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   musicPill.addEventListener('click', toggleMusic);
 
-  // Auto-play on load & fallback trigger on ANY first click/touch
+  // Sync audio element events with UI
+  bgAudio.addEventListener('play', () => {
+    isMusicPlaying = true;
+    musicPill.classList.add('playing');
+  });
+
+  bgAudio.addEventListener('pause', () => {
+    if (!synthInterval) {
+      isMusicPlaying = false;
+      musicPill.classList.remove('playing');
+    }
+  });
+
+  // Try auto-play on load
   window.addEventListener('load', () => {
     startMusic();
   });
 
+  // Unlock audio on ANY first user interaction (touch/click anywhere on page)
   function unlockAudioOnFirstInteraction() {
     startMusic();
     document.removeEventListener('pointerdown', unlockAudioOnFirstInteraction);
     document.removeEventListener('click', unlockAudioOnFirstInteraction);
     document.removeEventListener('touchstart', unlockAudioOnFirstInteraction);
   }
-  document.addEventListener('pointerdown', unlockAudioOnFirstInteraction, { once: true });
+  document.addEventListener('pointerdown', unlockAudioOnFirstInteraction, { once: true, passive: true });
   document.addEventListener('click', unlockAudioOnFirstInteraction, { once: true });
-  document.addEventListener('touchstart', unlockAudioOnFirstInteraction, { once: true });
+  document.addEventListener('touchstart', unlockAudioOnFirstInteraction, { once: true, passive: true });
 
   /* ==========================================================================
      4. SCENE NAVIGATION & INTERACTION
