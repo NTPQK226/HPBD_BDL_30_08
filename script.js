@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
       this.twinkleSpeed = Math.random() * 0.03 + 0.01;
       this.color = Math.random() > 0.4 ? '#ffffff' : (Math.random() > 0.5 ? '#ffd166' : '#ffb3c1');
     }
-    update() {
-      this.alpha += this.twinkleSpeed;
+    update(dt = 1) {
+      this.alpha += this.twinkleSpeed * dt;
       if (this.alpha > 1 || this.alpha < 0.1) {
         this.twinkleSpeed = -this.twinkleSpeed;
       }
@@ -76,8 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
       bgCtx.save();
       bgCtx.globalAlpha = Math.max(0, Math.min(1, this.alpha));
       bgCtx.fillStyle = this.color;
-      bgCtx.shadowBlur = this.size * 3;
-      bgCtx.shadowColor = this.color;
       bgCtx.beginPath();
       bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       bgCtx.fill();
@@ -92,17 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
     reset() {
       this.x = Math.random() * bgCanvas.width;
       this.y = bgCanvas.height + 20 + Math.random() * 50;
-      this.size = Math.random() * 14 + 10;
-      this.speedY = Math.random() * 0.8 + 0.4;
-      this.speedX = (Math.random() - 0.5) * 0.5;
-      this.alpha = Math.random() * 0.5 + 0.2;
+      this.size = Math.random() * 12 + 10;
+      this.speedY = Math.random() * 0.7 + 0.3;
+      this.speedX = (Math.random() - 0.5) * 0.4;
+      this.alpha = Math.random() * 0.4 + 0.2;
       this.rotation = Math.random() * Math.PI * 2;
-      this.rotSpeed = (Math.random() - 0.5) * 0.02;
+      this.rotSpeed = (Math.random() - 0.5) * 0.015;
     }
-    update() {
-      this.y -= this.speedY;
-      this.x += this.speedX;
-      this.rotation += this.rotSpeed;
+    update(dt = 1) {
+      this.y -= this.speedY * dt;
+      this.x += this.speedX * dt;
+      this.rotation += this.rotSpeed * dt;
       if (this.y < -30) {
         this.reset();
       }
@@ -121,24 +119,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   for (let i = 0; i < numStars; i++) stars.push(new Star());
-  for (let i = 0; i < 15; i++) hearts.push(new FloatingHeart());
+  for (let i = 0; i < 12; i++) hearts.push(new FloatingHeart());
 
-  function animateBackground() {
+  let lastBgTime = performance.now();
+  function animateBackground(currentTime) {
+    const now = currentTime || performance.now();
+    const dt = Math.min((now - lastBgTime) / 16.67, 2.5); // Target 60fps baseline
+    lastBgTime = now;
+
     bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
     stars.forEach(star => {
-      star.update();
+      star.update(dt);
       star.draw();
     });
     hearts.forEach(heart => {
-      heart.update();
+      heart.update(dt);
       heart.draw();
     });
     requestAnimationFrame(animateBackground);
   }
-  animateBackground();
+  requestAnimationFrame(animateBackground);
 
   /* ==========================================================================
-     2. CONFETTI & FIREWORKS ENGINE
+     2. CONFETTI & FIREWORKS ENGINE (DELTA-TIME NORMALIZED)
      ========================================================================== */
   const confettiParticles = [];
   const shootingStars = [];
@@ -148,23 +151,23 @@ document.addEventListener('DOMContentLoaded', () => {
     constructor(x, y) {
       this.x = x || confettiCanvas.width / 2;
       this.y = y || confettiCanvas.height / 2;
-      this.size = Math.random() * 10 + 6;
+      this.size = Math.random() * 9 + 5;
       this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.speedX = (Math.random() - 0.5) * 16;
-      this.speedY = Math.random() * -14 - 4;
-      this.gravity = 0.35;
+      this.speedX = (Math.random() - 0.5) * 14;
+      this.speedY = Math.random() * -12 - 4;
+      this.gravity = 0.32;
       this.rotation = Math.random() * 360;
-      this.rotSpeed = (Math.random() - 0.5) * 12;
+      this.rotSpeed = (Math.random() - 0.5) * 10;
       this.alpha = 1;
       this.decay = Math.random() * 0.012 + 0.008;
     }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.speedY += this.gravity;
-      this.speedX *= 0.98;
-      this.rotation += this.rotSpeed;
-      this.alpha -= this.decay;
+    update(dt = 1) {
+      this.x += this.speedX * dt;
+      this.y += this.speedY * dt;
+      this.speedY += this.gravity * dt;
+      this.speedX *= Math.pow(0.98, dt);
+      this.rotation += this.rotSpeed * dt;
+      this.alpha -= this.decay * dt;
     }
     draw() {
       confettiCtx.save();
@@ -182,15 +185,15 @@ document.addEventListener('DOMContentLoaded', () => {
       this.x = startX || Math.random() * confettiCanvas.width * 0.5;
       this.y = startY || Math.random() * confettiCanvas.height * 0.3;
       this.length = 120;
-      this.speed = 18;
+      this.speed = 16;
       this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.2;
       this.alpha = 1;
       this.text = text || '';
     }
-    update() {
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed;
-      this.alpha -= 0.015;
+    update(dt = 1) {
+      this.x += Math.cos(this.angle) * this.speed * dt;
+      this.y += Math.sin(this.angle) * this.speed * dt;
+      this.alpha -= 0.015 * dt;
     }
     draw() {
       confettiCtx.save();
@@ -218,15 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.text) {
         confettiCtx.font = '16px "Be Vietnam Pro", sans-serif';
         confettiCtx.fillStyle = '#ffd166';
-        confettiCtx.shadowBlur = 8;
-        confettiCtx.shadowColor = '#ffd166';
         confettiCtx.fillText(`✨ ${this.text}`, this.x + 15, this.y);
       }
       confettiCtx.restore();
     }
   }
 
-  function triggerConfettiBurst(x, y, count = 120) {
+  function triggerConfettiBurst(x, y, count = 100) {
     for (let i = 0; i < count; i++) {
       confettiParticles.push(new Confetti(x, y));
     }
@@ -236,12 +237,17 @@ document.addEventListener('DOMContentLoaded', () => {
     shootingStars.push(new ShootingStar(null, null, text));
   }
 
-  function animateConfetti() {
+  let lastConfettiTime = performance.now();
+  function animateConfetti(currentTime) {
+    const now = currentTime || performance.now();
+    const dt = Math.min((now - lastConfettiTime) / 16.67, 2.5);
+    lastConfettiTime = now;
+
     confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
 
     for (let i = confettiParticles.length - 1; i >= 0; i--) {
       const p = confettiParticles[i];
-      p.update();
+      p.update(dt);
       p.draw();
       if (p.alpha <= 0 || p.y > confettiCanvas.height + 20) {
         confettiParticles.splice(i, 1);
@@ -250,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let i = shootingStars.length - 1; i >= 0; i--) {
       const s = shootingStars[i];
-      s.update();
+      s.update(dt);
       s.draw();
       if (s.alpha <= 0) {
         shootingStars.splice(i, 1);
@@ -259,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(animateConfetti);
   }
-  animateConfetti();
+  requestAnimationFrame(animateConfetti);
 
   /* ==========================================================================
      3. AUDIO CONTROLLER (MP3 PLAYER)
